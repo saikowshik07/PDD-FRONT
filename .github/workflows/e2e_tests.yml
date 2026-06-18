@@ -1,0 +1,83 @@
+name: E2E Testing & Report
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  test-and-report:
+    name: Run E2E Tests & Generate Excel Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # --- 1. SET UP ENVIRONMENTS ---
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      # --- 2. INSTALL DEPENDENCIES ---
+      - name: Install Frontend Dependencies
+        run: |
+          yarn install --frozen-lockfile
+
+      - name: Install Python Dependencies
+        run: |
+          pip install selenium openpyxl requests
+
+      # --- 3. SPIN UP LOCAL SERVER ---
+      - name: Build & Preview Frontend
+        run: |
+          yarn build
+          npx vite preview --port 5173 &
+          echo "Waiting for frontend to start..."
+          # Install wait-on to wait for port
+          npm install -g wait-on
+          wait-on http://localhost:5173 --timeout 30000
+        env:
+          VITE_API_URL: https://pdd-back.onrender.com
+          VITE_DEMO_MODE: 'false'
+
+      # --- 4. RUN E2E TESTS ---
+      - name: Execute Selenium E2E Tests
+        id: run_e2e
+        run: |
+          python tests/run_e2e_tests.py
+        env:
+          FRONTEND_URL: http://localhost:5173
+          BACKEND_URL: https://pdd-back.onrender.com
+        continue-on-error: true # Continue so report is generated even on failure
+
+      # --- 5. GENERATE & UPLOAD REPORT ---
+      - name: Compile Excel Report
+        if: always()
+        run: |
+          python tests/generate_report.py
+
+      - name: Upload Test Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: E2E-Test-Report
+          path: tests/results/E2E_Test_Report.xlsx
+          retention-days: 14
+
+      # --- 6. PROPAGATE TEST FAILURE STATUS ---
+      - name: Check E2E Run Status
+        if: steps.run_e2e.outcome == 'failure'
+        run: |
+          echo "Selenium E2E Tests failed! Please download the E2E-Test-Report artifact for details."
+          exit 1
