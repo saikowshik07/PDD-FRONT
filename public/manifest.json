@@ -1,0 +1,22 @@
+{
+  "short_name": "SignVision AI",
+  "name": "SignVision AI — Deep Learning Sign Language Translator",
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#040407",
+  "theme_color": "#00f0ff",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "Premium AI sign language translation and emergency accessibility platform."
+}
