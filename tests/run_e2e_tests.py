@@ -196,12 +196,20 @@ def run_tests():
         t_start = time.time()
         try:
             driver.get(f"{frontend_url}/#auth")
-            time.sleep(2)
             
-            email_el = driver.find_elements(By.ID, "login-email")
-            reg_link = driver.find_elements(By.ID, "link-to-register")
+            # Explicitly wait for the URL to contain '#auth'
+            WebDriverWait(driver, 10).until(
+                EC.url_contains("#auth")
+            )
             
-            if email_el or reg_link or "auth" in driver.current_url:
+            # Explicitly wait for the email input field to render in the DOM
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//input[@type='email']"))
+            )
+            
+            email_el = driver.find_elements(By.XPATH, "//input[@type='email']")
+            
+            if email_el or "auth" in driver.current_url:
                 results.append({
                     "category": "Functionality",
                     "name": "Auth Panel Navigation",
