@@ -7,8 +7,9 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
 def generate_excel():
-    json_path = "tests/results/results.json"
-    excel_path = "tests/results/E2E_Test_Report.xlsx"
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(script_dir, "results", "results.json")
+    excel_path = os.path.join(script_dir, "results", "E2E_Test_Report.xlsx")
     
     if not os.path.exists(json_path):
         print(f"Error: results.json not found at {json_path}")
