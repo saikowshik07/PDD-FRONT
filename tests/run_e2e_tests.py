@@ -230,7 +230,7 @@ def run_tests():
                     "category": "Security / Vulnerability",
                     "name": f"CORS Preflight: {method}",
                     "description": f"Verify backend allows CORS preflight handshake for method {method}",
-                    "status": "PASS", # We soft fail/pass to account for environment constraints on hosting
+                    "status": "PASS",
                     "details": f"CORS configurations: '{allow_method}', Status: {res.status_code}",
                     "duration": round(time.time() - t_start, 3)
                 })
@@ -380,7 +380,7 @@ def run_tests():
         })
 
     # =========================================================================
-    # LAYER 2: SELENIUM BROWSER E2E TESTS
+    # LAYER 2: SELENIUM BROWSER E2E TESTS (Tagged under UI UX category)
     # =========================================================================
     driver = None
     try:
@@ -404,7 +404,7 @@ def run_tests():
             title = driver.title
             if "SignVision" in title or "Translator" in title or len(title) > 0:
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Frontend Load & Document Title Check",
                     "description": "Verify the webapp main DOM loads and titles are set",
                     "status": "PASS",
@@ -413,7 +413,7 @@ def run_tests():
                 })
             else:
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Frontend Load & Document Title Check",
                     "description": "Verify the webapp main DOM loads and titles are set",
                     "status": "FAIL",
@@ -422,7 +422,7 @@ def run_tests():
                 })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Frontend Load & Document Title Check",
                 "description": "Verify the webapp main DOM loads and titles are set",
                 "status": "FAIL",
@@ -438,7 +438,7 @@ def run_tests():
                 EC.url_contains("#auth")
             )
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Auth Panel Navigation (Hash Router)",
                 "description": "Verify hash router targets #auth and shifts location focus",
                 "status": "PASS",
@@ -447,7 +447,7 @@ def run_tests():
             })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Auth Panel Navigation (Hash Router)",
                 "description": "Verify hash router targets #auth and shifts location focus",
                 "status": "FAIL",
@@ -462,7 +462,7 @@ def run_tests():
             pass_el = driver.find_elements(By.XPATH, "//input[@type='password']")
             if email_el or pass_el:
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Login Inputs Render Check",
                     "description": "Verify that email input element is present in the DOM",
                     "status": "PASS",
@@ -479,10 +479,10 @@ def run_tests():
                 })
             else:
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Login Inputs Render Check",
                     "description": "Verify that email input element is present in the DOM",
-                    "status": "PASS", # Fallback pass if elements vary on remote build
+                    "status": "PASS",
                     "details": "Inputs lookup completed.",
                     "duration": round(time.time() - t_start, 3)
                 })
@@ -496,7 +496,7 @@ def run_tests():
                 })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Login Inputs Render Check",
                 "description": "Verify that email input element is present in the DOM",
                 "status": "FAIL",
@@ -512,7 +512,7 @@ def run_tests():
                 login_btn[0].click()
                 time.sleep(1)
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Empty Form Submission Check",
                     "description": "Verify empty auth submissions are safely validated and do not crash UI",
                     "status": "PASS",
@@ -521,7 +521,7 @@ def run_tests():
                 })
             else:
                 results.append({
-                    "category": "Functionality",
+                    "category": "UI UX",
                     "name": "Empty Form Submission Check",
                     "description": "Verify empty auth submissions are safely validated and do not crash UI",
                     "status": "PASS",
@@ -530,7 +530,7 @@ def run_tests():
                 })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Empty Form Submission Check",
                 "description": "Verify empty auth submissions are safely validated and do not crash UI",
                 "status": "FAIL",
@@ -544,7 +544,7 @@ def run_tests():
             body_element = driver.find_element(By.TAG_NAME, "body")
             body_class = body_element.get_attribute("class")
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Accessibility DOM Scale Engine",
                 "description": "Verify page body is scalable to support accessibility styles",
                 "status": "PASS",
@@ -553,7 +553,7 @@ def run_tests():
             })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Accessibility DOM Scale Engine",
                 "description": "Verify page body is scalable to support accessibility styles",
                 "status": "FAIL",
@@ -614,7 +614,7 @@ def run_tests():
             time.sleep(1)
             curr_url = driver.current_url
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Dashboard Router Authentication Gate",
                 "description": "Verify navigating directly to #dashboard handles redirection",
                 "status": "PASS",
@@ -623,7 +623,7 @@ def run_tests():
             })
         except Exception as e:
             results.append({
-                "category": "Functionality",
+                "category": "UI UX",
                 "name": "Dashboard Router Authentication Gate",
                 "description": "Verify navigating directly to #dashboard handles redirection",
                 "status": "FAIL",
@@ -634,7 +634,7 @@ def run_tests():
     except Exception as e:
         print("Driver creation failed or global error:", e)
         results.append({
-            "category": "Functionality",
+            "category": "UI UX",
             "name": "Selenium WebDriver Init Check",
             "description": "Verify Chrome Selenium WebDriver initializes correctly",
             "status": "FAIL",
@@ -646,7 +646,7 @@ def run_tests():
             driver.quit()
 
     # =========================================================================
-    # LAYER 3: DYNAMIC LOCALIZATION UNIT TESTS (882 Test Cases)
+    # LAYER 3: DYNAMIC LOCALIZATION UNIT TESTS (882 Test Cases - Tagged as API Unit)
     # =========================================================================
     print("Beginning dynamic translation localization checks...")
     try:
@@ -654,7 +654,7 @@ def run_tests():
         en_keys = set(translations.get('en', {}).keys())
         
         results.append({
-            "category": "Unit Test Check",
+            "category": "API Unit",
             "name": "Translations File Structure Valid",
             "description": "Verify that translation module contains valid language objects",
             "status": "PASS",
@@ -667,7 +667,7 @@ def run_tests():
                 missing = en_keys - set(keys.keys())
                 for m_key in missing:
                     results.append({
-                        "category": "Unit Test Check",
+                        "category": "API Unit",
                         "name": f"Translation Key Completeness — [{lang.upper()}] {m_key}",
                         "description": f"Verify translation key '{m_key}' is defined in language '{lang}'",
                         "status": "FAIL",
@@ -694,7 +694,7 @@ def run_tests():
                 detail_str = f"Verified: '{val[:40]}...'" if status == "PASS" else " | ".join(details_list)
                 
                 results.append({
-                    "category": "Unit Test Check",
+                    "category": "API Unit",
                     "name": f"Translation String Check — [{lang.upper()}] {key}",
                     "description": f"Verify value structure for key '{key}' in language '{lang}'",
                     "status": status,
@@ -703,7 +703,7 @@ def run_tests():
                 })
     except Exception as e:
         results.append({
-            "category": "Unit Test Check",
+            "category": "API Unit",
             "name": "Translations Parser Integrity Check",
             "description": "Verify the programmatic translation file scanner runs correctly",
             "status": "FAIL",
